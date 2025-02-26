@@ -1,0 +1,119 @@
+basePath: /api/v1
+definitions:
+  github_com_hse-revizor_analysis-service_internal_pkg_router_dto.AnalyzeResponse:
+    properties:
+      created_at:
+        type: string
+      finished_at:
+        type: string
+      id:
+        type: string
+      project_id:
+        type: string
+      rule_results:
+        items:
+          $ref: '#/definitions/github_com_hse-revizor_analysis-service_internal_pkg_router_dto.AnalyzeResultResponse'
+        type: array
+      ruleset_id:
+        type: string
+      started_at:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  github_com_hse-revizor_analysis-service_internal_pkg_router_dto.AnalyzeResultResponse:
+    properties:
+      created_at:
+        type: string
+      details:
+        type: string
+      id:
+        type: string
+      rule_id:
+        type: string
+      status:
+        type: string
+    type: object
+  github_com_hse-revizor_analysis-service_internal_pkg_router_dto.CreateAnalyzeRequest:
+    properties:
+      project_id:
+        type: string
+      ruleset_id:
+        type: string
+    required:
+    - project_id
+    - ruleset_id
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a Swagger documentation.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Analysis Service API
+  version: "1.0"
+paths:
+  /api/analyze:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Analyze creation request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_hse-revizor_analysis-service_internal_pkg_router_dto.CreateAnalyzeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_hse-revizor_analysis-service_internal_pkg_router_dto.AnalyzeResponse'
+      summary: Create new analyze
+      tags:
+      - Analyze
+  /api/analyze/{id}:
+    get:
+      parameters:
+      - description: Analyze ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_hse-revizor_analysis-service_internal_pkg_router_dto.AnalyzeResponse'
+      summary: Get analyze by ID
+      tags:
+      - Analyze
+  /api/projects/{project_id}/analyzes:
+    get:
+      parameters:
+      - description: Project ID
+        in: path
+        name: project_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_hse-revizor_analysis-service_internal_pkg_router_dto.AnalyzeResponse'
+            type: array
+      summary: Get analyzes by project ID
+      tags:
+      - Analyze
+swagger: "2.0"

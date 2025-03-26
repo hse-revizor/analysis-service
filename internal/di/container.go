@@ -8,6 +8,9 @@ import (
 	trmgorm "github.com/avito-tech/go-transaction-manager/gorm"
 	"github.com/avito-tech/go-transaction-manager/trm"
 	"github.com/avito-tech/go-transaction-manager/trm/manager"
+	"github.com/hse-revizor/analysis-service/internal/pkg/clients/parser"
+	"github.com/hse-revizor/analysis-service/internal/pkg/clients/projects"
+	"github.com/hse-revizor/analysis-service/internal/pkg/clients/rules"
 	"github.com/hse-revizor/analysis-service/internal/pkg/router"
 	"github.com/hse-revizor/analysis-service/internal/pkg/service/analyze"
 	"github.com/hse-revizor/analysis-service/internal/pkg/storage/sql"
@@ -23,7 +26,9 @@ type Container struct {
 	db                 *gorm.DB
 	transactionManager trm.Manager
 	analysiservice     *analyze.Service
-	analyzeService     *analyze.Service
+	rulesClient        *rules.Client
+	projectsClient     *projects.Client
+	parserClient       *parser.Client
 }
 
 func New(cfg *config.Config) *Container {
@@ -65,7 +70,25 @@ func (c *Container) GetHttpServer() *http.Server {
 
 func (c *Container) Getanalysiservice() *analyze.Service {
 	return get(&c.analysiservice, func() *analyze.Service {
-		return analyze.New(c.GetSQLStorage())
+		return analyze.New(c.GetSQLStorage(), c.GetRulesClient(), c.GetProjectsClient(), c.GetParserClient())
+	})
+}
+
+func (c *Container) GetRulesClient() *rules.Client {
+	return get(&c.rulesClient, func() *rules.Client {
+		return rules.New(c.cfg)
+	})
+}
+
+func (c *Container) GetProjectsClient() *projects.Client {
+	return get(&c.projectsClient, func() *projects.Client {
+		return projects.New(c.cfg)
+	})
+}
+
+func (c *Container) GetParserClient() *parser.Client {
+	return get(&c.parserClient, func() *parser.Client {
+		return parser.New(c.cfg)
 	})
 }
 

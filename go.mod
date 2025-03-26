@@ -58,6 +58,7 @@ require (
 require (
 	github.com/4kayDev/logger v0.0.0-20240530181957-9cc8fde2f36f
 	github.com/avito-tech/go-transaction-manager v1.4.0
+	github.com/dr3dnought/request_builder v0.0.0-20240103083619-bb7a14763412
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/gin-contrib/cors v1.7.3
 	github.com/gin-gonic/gin v1.10.0

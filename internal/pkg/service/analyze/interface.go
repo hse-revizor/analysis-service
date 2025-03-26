@@ -4,6 +4,9 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/hse-revizor/analysis-service/internal/pkg/clients/parser"
+	"github.com/hse-revizor/analysis-service/internal/pkg/clients/projects"
+	"github.com/hse-revizor/analysis-service/internal/pkg/clients/rules"
 	"github.com/hse-revizor/analysis-service/internal/pkg/models"
 )
 
@@ -15,9 +18,12 @@ type storage interface {
 }
 
 type Service struct {
-	storage storage
+	rulesClient    *rules.Client
+	projectsClient *projects.Client
+	parserClient   *parser.Client
+	storage        storage
 }
 
-func New(storage storage) *Service {
-	return &Service{storage: storage}
+func New(storage storage, rulesClient *rules.Client, projectsClient *projects.Client, parserClient *parser.Client) *Service {
+	return &Service{storage: storage, rulesClient: rulesClient, projectsClient: projectsClient, parserClient: parserClient}
 }
